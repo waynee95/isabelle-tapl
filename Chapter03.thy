@@ -59,6 +59,25 @@ proof (induction t)
   finally show ?case .
 qed auto
 
-(* TODO: 3.3.4 *)
+(* 3.3.4 *)
+lemma raw_induct[case_names TTrue FFalse Zero Succ Pred IsZero IfElse]: 
+  assumes "P TTrue" 
+    and "P FFalse"
+    and "P Zero"
+    and "\<And>t. P (Succ t)"
+    and "\<And>t. P (Pred t)" 
+    and "\<And>t. P (IsZero t)"
+    and "\<And>t1 t2 t3. P (IfElse t1 t2 t3)"
+  shows "P t"
+  using assms
+  by (cases t, auto)
+
+lemma depth_induct: 
+  "(\<And>r::t. depth r < depth s \<Longrightarrow> P r) \<Longrightarrow> P s"
+  sorry
+
+lemma size_induct: 
+  "\<And>s. (\<And>r::t. size r < size s \<Longrightarrow> P r) \<Longrightarrow> P s"
+  sorry
 
 end

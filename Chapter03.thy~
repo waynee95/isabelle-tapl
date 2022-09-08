@@ -21,52 +21,10 @@ fun terms :: "nat \<Rightarrow> t set" where
 "terms (Suc n) = 
   {TTrue,FFalse,Zero}
   \<union> {Succ t | t. t \<in> terms n} \<union> {Pred t | t. t \<in> terms n} \<union> {IsZero t | t. t \<in> terms n}
-  \<union> {IfElse t1 t2 t3 | t1 t2 t3. let termsn = terms n in t1 \<in> termsn \<and> t2 \<in> termsn \<and> t3 \<in> termsn}"
+  \<union> {IfElse t1 t2 t3 | t1 t2 t3. t1 \<in> terms n \<and> t2 \<in> terms n \<and> t3 \<in> terms n}"
 
-lemma succ: "Succ t \<in> terms (Suc n) \<longleftrightarrow> t \<in> terms n" 
-  by (induction n) auto
-
-lemma pred: "Pred t \<in> terms (Suc n) \<longleftrightarrow> t \<in> terms n" 
-  by (induction n) auto
-
-lemma iszero: "IsZero t \<in> terms (Suc n) \<longleftrightarrow> t \<in> terms n" 
-  by (induction n) auto
-
-lemma ifelse: "IfElse t1 t2 t3 \<in> terms (Suc n) \<longleftrightarrow> t1 \<in> terms n \<and> t2 \<in> terms n \<and> t3 \<in> terms n" 
-  by (induction n) auto
-thm terms.simps
 lemma "terms n \<subseteq> terms (Suc n)"
-proof (induction n)
-  case 0
-  then show ?case
-    by simp
-next
-  case (Suc n)
-  have "t \<in> terms (Suc n) \<Longrightarrow> t \<in> terms (Suc (Suc n))" for t
-  proof (induction t)
-    case (Succ t)
-    then show ?case
-      using Suc.IH
-      by (meson in_mono succ) 
-  next
-    case (Pred t)
-    then show ?case 
-      using Suc.IH
-      by (meson in_mono pred) 
-  next
-    case (IsZero t)
-    then show ?case 
-      using Suc.IH
-      by (meson in_mono iszero) 
-  next
-    case (IfElse t1 t2 t3)
-    then show ?case 
-      using Suc.IH
-      by (meson in_mono ifelse) 
-  qed auto
-  then show ?case 
-    by blast
-qed
+  sorry
 
 (* 3.3.1 *)
 fun Consts :: "t \<Rightarrow> t set" where

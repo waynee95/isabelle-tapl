@@ -88,14 +88,20 @@ fun size :: "t \<Rightarrow> nat" where
 "size (IsZero t1) = 1 + size t1" |
 "size (IfElse t1 t2 t3) = 1 + size t1 + size t2 + size t3" 
 
+lemma size_not_zero: "size t > 0"
+  by (cases t) auto
+
 fun depth :: "t \<Rightarrow> nat" where
 "depth TTrue = 1" |
 "depth FFalse = 1" |
 "depth Zero = 1" |
-"depth (Succ t1) = 1 + size t1" |
-"depth (Pred t1) = 1 + size t1" |
-"depth (IsZero t1) = 1 + size t1" |
+"depth (Succ t1) = 1 + depth t1" |
+"depth (Pred t1) = 1 + depth t1" |
+"depth (IsZero t1) = 1 + depth t1" |
 "depth (IfElse t1 t2 t3) = Max {depth t1, depth t2, depth t3}" 
+
+lemma depth_not_zero: "depth t > 0"
+  by (induction t) auto
 
 (* 3.3.3 *)
 lemma "card (Consts t) \<le> size t"
@@ -123,14 +129,14 @@ lemma raw_induct[case_names TTrue FFalse Zero Succ Pred IsZero IfElse]:
     and "\<And>t1 t2 t3. P (IfElse t1 t2 t3)"
   shows "P t"
   using assms
-  by (cases t, auto)
+  by (cases t) auto
 
 lemma depth_induct: 
   "(\<And>r::t. depth r < depth s \<Longrightarrow> P r) \<Longrightarrow> P s"
   sorry
 
 lemma size_induct: 
-  "\<And>s. (\<And>r::t. size r < size s \<Longrightarrow> P r) \<Longrightarrow> P s"
+  "(\<And>r::t. size r < size s \<Longrightarrow> P r) \<Longrightarrow> P s"
   sorry
 
 end
